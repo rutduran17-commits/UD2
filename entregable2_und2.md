@@ -10,3 +10,8 @@
 |8| La nota adhesiva con la contra pegada en el monitor| Fuente 5 | Con que se llegue a ver lo que dice se entran hasta en tus sueños| No hacer público contraseñas ni visiblles|
 |9| Usan Wi-Fi en lugares públicos| Fuente 5 | En redes abiertas, cualquiera puede escuchar el tráfico de red, robar las contraseñas que usen en ese momento| Siempre utilizar una red privada, la VPN a la hora de trabajar|
 
+Contramedidas más importantes
+1. Actualizar los equipos viejos
+   * Al no tener soporte por su antigüedad dejas muchos huecos abiertos, los atacantes lo toman como invitación a proceder.
+2. Corregir la seguridad de los correos
+
