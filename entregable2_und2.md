@@ -10,8 +10,24 @@
 |8| La nota adhesiva con la contra pegada en el monitor| Fuente 5 | Con que se llegue a ver lo que dice se entran hasta en tus sueños| No hacer público contraseñas ni visiblles|
 |9| Usan Wi-Fi en lugares públicos| Fuente 5 | En redes abiertas, cualquiera puede escuchar el tráfico de red, robar las contraseñas que usen en ese momento| Siempre utilizar una red privada, la VPN a la hora de trabajar|
 
+
+
+Plan de ataque:
+
+Primero de lo primero, mando correos falsos a los empleados para robarles las contraseñas. Después, como sus equipos son antiguos y vulnerables, me meto por ahí para así controlar sus sistemas. También se pude aprovechar que publican sus vacaciones para engañarles por teléfono como robarles los datos cuando van a una cafetería. ya por último, mando emails falsos a sus clientes pidiendo pagos a mi cuenta.
+
 Contramedidas más importantes
 1. Actualizar los equipos viejos
    * Al no tener soporte por su antigüedad dejas muchos huecos abiertos, los atacantes lo toman como invitación a proceder.
-2. Corregir la seguridad de los correos
+2. Corregir la seguridad de los correos electrónicos.
+*  tendríamos que arreglar el SPF ya que el cómo lo tienen ahora cualquiera puede enviar   emails haciéndose pasar por la empresa. al ponerle el sello de DKIM para garantizar su seguridad el enviarlas.
+3. Hacer una formación sobre la ciberseguridad
+  *  De esta manera capacitas a los trabajadores y sabrán tomar las medidas necesarias a la hora de trabajar y fiearse de algo.
+   
+
+
+
+
+
+
 
