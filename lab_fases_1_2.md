@@ -103,6 +103,8 @@ así ya no molesta.
 | 60492/tcp, 941/udp | rpc.statd | /usr/sbin/rpc.statd | nfs-common | No | apagarlo |
 
 
+## B. Antes y después
+
 | Aspecto | Antes | Contramedida aplicada | Después |
 | :--- | :--- | :--- | :--- | 
 | Puertos abiertos | * Con nmap 23 puertos fueron detectados   * Con netstat unos 36| Desactivamos al super servidor que era xinetd y paramos los demás servicios innecesarios junto a retirarlos del arranque automático. | Se fueron todos esos puertos innesesarios dejando solo la 80 y 22.  |
