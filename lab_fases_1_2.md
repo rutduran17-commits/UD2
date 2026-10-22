@@ -56,7 +56,8 @@ dpkg -S /usr/sbin/in.rexecd
 * Usemos a  jsvc, aquí tuve que buscar su script para pagarlo ya que arranca al iniciarse por lo cual está en la ruta de /etc/init.d/
 * sudo grep -rn "jsvc" /etc/init.d/  lo cual me devolvió --> /etc/init.d/tomcat5.5:26:DAEMON=/usr/bin/jsvc (ese es el script)
     sudo /etc/init.d/tomcat5.5 stop   ---> así lo paramos
-pero quería que no vuelva a arrancar al inicio, entonces este comando nos ayuda a que no ---> sudo update-rc.d -f tomcat5.5 remove
+pero quería que no vuelva a arrancar al inicio,
+entonces este comando nos ayuda a que no ---> sudo update-rc.d -f tomcat5.5 remove
 
 así ya no molesta.
 
@@ -91,10 +92,18 @@ así ya no molesta.
  
 # Preguntas finales
 1. ¿Qué contramedida ha reducido más lo que ve el atacante? ¿Por qué?
-   
+   * Una de ellas es apagar al portero de xinetd, porque me di ceunta que este controlaba varios programas , al apagarlo, apagué los programas que tenía a su dominio junto       a sus puertos que no eran necesarias y generaban un peligro .
+   * al igual  que los las demás programas con sus puertos. El atacante ya no tendrá una lista de puertos vulnerables para escoger. 
 3. Si solo ocultáis un banner pero el servicio sigue activo, ¿la vulnerabilidad sigue ahí? Razonad la respuesta.
-4. Torrent-Vulnerable usa un sistema operativo sin soporte desde hace años. ¿Puede una contramedida de estas sustituir a actualizarlo? ¿Qué haríais en una empresa real?
-5. De todas las contramedidas de las partes A y B, ¿cuáles evitan que el atacante encuentre información y cuáles solo ayudan a detectar que lo están intentando? (Aún no las hemos aplicado todas, pero pensad en cuáles serían de cada tipo.)
+   * esto es como ocultar un jarrón roto, al ocultar el bannner solo lo quitas a simple vista, si el atacante es pedrito que recién está aprendiendo, seguro no lo ve, pero los hackers que quieran hacer algo en contra de la empresa lo verán.
+   * Si, la vulnerabilidad sigue ahí, lo mejor sería apagarlo por completo si representa una menaza.
+5. Torrent-Vulnerable usa un sistema operativo sin soporte desde hace años. ¿Puede una contramedida de estas sustituir a actualizarlo? ¿Qué haríais en una empresa real?
+   * No, aunque tome contramedidas como cerrar puertos, dar reglas, etc, no termina con el problema ya que eso está desde la raíz, el sistema operativo tiene sus fallos muy fuertes al dejar de recibir su soporte.
+   * En una empresa real, doy por hecho de que conocen el peligro de tener un SO obsoleta, pero de igual manera se puede recomendar la actualización o la migración, si se oponen a eso por miedo a tocar algo, se le puede dar metidas temporales. Por último que dería de ser uno de los primeros es jubilar el sistema operativo.
+7. De todas las contramedidas de las partes A y B, ¿cuáles evitan que el atacante encuentre información y cuáles solo ayudan a detectar que lo están intentando? (Aún no las hemos aplicado todas, pero pensad en cuáles serían de cada tipo.)
+   - las que evitan que un atacante encuentre información son las de desactivar servicios, cerrar los puertos. Con eso conseguimos que no sea tan visible y que se reduzca el ataque.
+  
+   - 
 
 
 
