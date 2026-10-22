@@ -1,5 +1,67 @@
-# Tabla de Inventario de Servicios y Análisis de Cadena
+# Laboratorio fases 1 y 2 — Estudio Torren
 
+## B. Antes y después:
+* Empecé lanzando desde Torrent-Auditor lo siguiente:
+
+  sudo nmap -sV 192.168.10.10 -oN antes.txt
+
+* 192.168.10.10 es la IP de la máquina vulnerable.
+
+* Al abrir el archivo antes.txt, veo que hay como 23 puertos abiertos.
+
+* En Torrent-vulnerable lancé el:
+
+  sudo netstat -tulpn
+
+* lo cual nos arrojó 35 puertos abiertos. Hay puertos con la IP 127.0.0.1 esa la que no sale al exterior por lo que nmap no lo vió. 
+
+* Las clasificamos ya que solo nos teníamos que quedar con 2 puertos abiertos. 80 y 22.
+
+
+# Empezamos con un puerto ejmpl. puerto 512:
+
+ ¿Como averiguar su informaión?
+
+A simple vista ya sabemos el puerto que es 512 y el protocolo es tcp.
+busquemos su nombre de servicio ya que xinetd es un portero.
+
+*  podemos verlo escribiendo: grep -w 512/tcp /etc/services
+
+* De esta manera nos devuleve el nombre del servicio que es exec.
+
+* Tambien usando: sudo grep -v '^#' /etc/inetd.conf  ---> todos los programas que tienen como portero a xinet estan dentro.
+
+* vemos que exec se encuentra dentro y que su programa ejecutable es:
+
+
+/usr/sbin/in.rexecd
+
+* Ahora veamos el paquete usando:
+
+dpkg -S /usr/sbin/in.rexecd
+
+* ahí dentro vemos que el paquete se llama:
+
+ rsh-server
+
+* Pero a la hora de intentar apagar ese servicio "in.rexecd" no era el que lo gestionaba si no xinet.
+  sudo ls -l /proc/[PID]/exe
+* se ve que se ejecuta desde /usr/sbin/xinetd
+* por lo que fue más fácil apagar al portero :
+  sudo /etc/init.d/xinetd stop
+  * usando el comando  which (nombre) vemos de donde viene
+* comprobamos que todos los que llevaban a xinetd de portero desaparecieron junto a sus puertos.
+
+# parar un programa que arranca a la hora de encender la máquina.
+* Usemos a  jsvc, aquí tuve que buscar su script para pagarlo ya que arranca al iniciarse por lo cual está en la ruta de /etc/init.d/
+* sudo grep -rn "jsvc" /etc/init.d/  lo cual me devolvió --> /etc/init.d/tomcat5.5:26:DAEMON=/usr/bin/jsvc (ese es el script)
+    sudo /etc/init.d/tomcat5.5 stop   ---> así lo paramos
+pero quería que no vuelva a arrancar al inicio, entonces este comando nos ayuda a que no ---> sudo update-rc.d -f tomcat5.5 remove
+
+así ya no molesta.
+
+ 
+ 
 | Puerto / Proto | Nombre Servicio  | Programa Ejecutable  | Paquete (Debian) | ¿Es necesario?  | Decisión |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 512/tcp| exec| /usr/sbin/in.rexecd |  rsh-server |No | apagarlo |
@@ -20,8 +82,6 @@
 |22/ tcp6 | ss |  /usr/sbin/sshd | openssh-server | Si| mantenerlo|
 
 
-En el /usr/sbin/in.rexecd aún que dentro de sudo grep '^#' /etc/inetd.conf salía esa ruta, al hacer un sudo ls -l /proc/(pid del programa)/exe salió la ruta de /usr/sbin/xinetd por lo que a la hora de apagar el programa fue con un sudo nano /etc/init.d/winetd stop y al volver a consultar con el sudo netstat -antp, todos los puertos que tenían a xinetd como portero, desaparecieron, me resultó más fácil apagar al cabecilla que hacerlo uno por uno.
-
 
 | Aspecto | Antes | Contramedida aplicada | Después |
 | :--- | :--- | :--- | :--- | 
@@ -31,9 +91,10 @@ En el /usr/sbin/in.rexecd aún que dentro de sudo grep '^#' /etc/inetd.conf sal�
  
 # Preguntas finales
 1. ¿Qué contramedida ha reducido más lo que ve el atacante? ¿Por qué?
-2. Si solo ocultáis un banner pero el servicio sigue activo, ¿la vulnerabilidad sigue ahí? Razonad la respuesta.
-3. Torrent-Vulnerable usa un sistema operativo sin soporte desde hace años. ¿Puede una contramedida de estas sustituir a actualizarlo? ¿Qué haríais en una empresa real?
-4. De todas las contramedidas de las partes A y B, ¿cuáles evitan que el atacante encuentre información y cuáles solo ayudan a detectar que lo están intentando? (Aún no las hemos aplicado todas, pero pensad en cuáles serían de cada tipo.)
+   
+3. Si solo ocultáis un banner pero el servicio sigue activo, ¿la vulnerabilidad sigue ahí? Razonad la respuesta.
+4. Torrent-Vulnerable usa un sistema operativo sin soporte desde hace años. ¿Puede una contramedida de estas sustituir a actualizarlo? ¿Qué haríais en una empresa real?
+5. De todas las contramedidas de las partes A y B, ¿cuáles evitan que el atacante encuentre información y cuáles solo ayudan a detectar que lo están intentando? (Aún no las hemos aplicado todas, pero pensad en cuáles serían de cada tipo.)
 
 
 
