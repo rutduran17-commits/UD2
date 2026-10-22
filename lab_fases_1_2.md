@@ -26,13 +26,14 @@ En el /usr/sbin/in.rexecd aún que dentro de sudo grep '^#' /etc/inetd.conf sal�
 | Aspecto | Antes | Contramedida aplicada | Después |
 | :--- | :--- | :--- | :--- | 
 | Puertos abiertos | * Con nmap 23 puertos fueron detectados   * Con netstat unos 36| Desactivamos al super servidor que era xinetd y paramos los demás servicios innecesarios junto a retirarlos del arranque automático. | Se fueron todos esos puertos innesesarios dejando solo la 80 y 22.  |
-|Servicios/versiones visibles | Tenía muy vivibles servicios que ahora están obsoletos y vulnerables.| | | 
-| Respuesta al ping | | | | 
+|Servicios/versiones visibles | Tenía muy vivibles servicios que ahora están obsoletos y vulnerables.|  Cierre de los demonios vulnerables y se desactivaron sus  de sus scripts de inicio para evitar su reactivación tras reinicios.| Servicios heredados inaccesibles y versiones obsoletas ocultas a los escaneos externos. | 
+| Respuesta al ping |a máquina respondía con normalidad a las solicitudes ICMP Echo Request lanzadas desde la máquina atacante (Torrent-Auditor). | Aplicación de la regla de cortafuegos en la cadena de entrada: <br>`sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP` |Pérdida del 100% de paquetes (`100% packet loss` / `Request timeout`), haciendo la máquina invisible a sondeos ICMP básicos. |
+ 
+# Preguntas finales
+1. ¿Qué contramedida ha reducido más lo que ve el atacante? ¿Por qué?
+2. Si solo ocultáis un banner pero el servicio sigue activo, ¿la vulnerabilidad sigue ahí? Razonad la respuesta.
+3. Torrent-Vulnerable usa un sistema operativo sin soporte desde hace años. ¿Puede una contramedida de estas sustituir a actualizarlo? ¿Qué haríais en una empresa real?
+4. De todas las contramedidas de las partes A y B, ¿cuáles evitan que el atacante encuentre información y cuáles solo ayudan a detectar que lo están intentando? (Aún no las hemos aplicado todas, pero pensad en cuáles serían de cada tipo.)
 
 
 
-| Aspecto | Antes | Contramedida aplicada | Después |
-| :--- | :--- | :--- | :--- | 
-| **Puertos abiertos** | Múltiples puertos expuestos (~36 en `netstat`, ~23+ detectados por `nmap`, incluyendo servicios heredados y Tomcat). | Desactivación del super-servidor `xinetd`, parada de servicios innecesarios (`tomcat5.5`) y retirada del arranque automático (`update-rc.d -f remove`). | Reducción drástica de la superficie de ataque, manteniendo únicamente los servicios esenciales para la gestión (ej. SSH). |
-| **Servicios/versiones visibles** | Alta visibilidad de servicios obsoletos y vulnerables (ej. `rexec` en puerto 512, conector AJP de Tomcat en puerto 8009, UnrealIRCd, etc.) detectados por escaneos. | Cierre de demonios vulnerables y desactivación de sus scripts de inicio para evitar su reactivación tras reinicios. | Servicios heredados inaccesibles y versiones obsoletas ocultas a los escaneos externos. |
-| **Respuesta al ping** | La máquina respondía con normalidad a las solicitudes ICMP Echo Request lanzadas desde la máquina atacante (Torrent-Auditor). | Aplicación de la regla de cortafuegos en la cadena de entrada: <br>`sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP` | Pérdida del 100% de paquetes (`100% packet loss` / `Request timeout`), haciendo la máquina invisible a sondeos ICMP básicos. |
