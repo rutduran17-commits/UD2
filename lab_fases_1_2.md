@@ -20,4 +20,4 @@
 |22/ tcp6 | ss |  /usr/sbin/sshd | openssh-server | Si| mantenerlo|
 
 
-
+En el /usr/sbin/in.rexecd aún que dentro de sudo grep '^#' /etc/inetd.conf salía esa ruta, al hacer un sudo ls -l /proc/(pid del programa)/exe salió la ruta de /usr/sbin/xinetd por lo que a la hora de apagar el programa fue con un sudo nano /etc/init.d/winetd stop y al volver a consultar con el sudo netstat -antp, todos los puertos que tenían a xinetd como portero, desaparecieron, me resultó más fácil apagar al cabecilla que hacerlo uno por uno.
