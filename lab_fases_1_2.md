@@ -61,13 +61,16 @@ entonces este comando nos ayuda a que no ---> sudo update-rc.d -f tomcat5.5 remo
 
 así ya no molesta.
 
- 
+ * Algunos no me daban el PID ni el nombre por lo que usaba el comando de
+   grep (puerto) /etc/services
+
+* Por último se bloquea el ping con sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
  
 | Puerto / Proto | Nombre Servicio  | Programa Ejecutable  | Paquete (Debian) | ¿Es necesario?  | Decisión |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 512/tcp| exec| /usr/sbin/in.rexecd |  rsh-server |No | apagarlo |
 |513/tcp | login|/usr/sbin/in.rlogind | rsh-server| No |apagarlo| 
-| 2049/tcp| nsf| /usr/sbin/rpc.nfsd| nfs-kernel-server| No | Para su casa |
+| 2049/tcp| nsf| /usr/sbin/rpc.nfsd| nfs-kernel-server| No | Apagarlo |
 | 514/tcp| shell|/usr/sbin/in.rshd |rsh-server | No | apagarlo |
 |4604/tcp |rmiregistry | /usr/bin/rmiregistry| java-gcj-compat-headless |No | apagarlo|
 | 8009/tcp | jsvc | /usr/bin/jsvc | jsvc | No | apagarlo |
@@ -81,7 +84,23 @@ así ya no molesta.
 | 6000/tcp | Xtightvnc (supuestamente unrealircd) |  /usr/bin/Xtightvnc | tightvncserver |No|apagarlo|
 |80/tcp | apache2 |  /usr/sbin/apache2 | apache2.2-common| Si | mantenerlo|
 |22/ tcp6 | ss |  /usr/sbin/sshd | openssh-server | Si| mantenerlo|
-
+| 21/tcp | ftp (xinetd) | /usr/sbin/vsftpd | vsftpd | No | apagarlo |
+| 23/tcp | telnet (xinetd) | /usr/sbin/in.telnetd | telnetd | No | apagarlo |
+| 25/tcp | smtp | /usr/sbin/master (Postfix) | postfix | No | apagarlo |
+| 53/tcp, udp | dns | /usr/sbin/named | bind9 | No | apagarlo |
+| 69/udp | tftp (xinetd) | /usr/sbin/in.tftpd | tftpd-hpa | No | apagarlo |
+| 137, 138/udp | netbios-ns/dgm | /usr/sbin/nmbd | samba | No | apagarlo |
+| 445/tcp | microsoft-ds (smb) | /usr/sbin/smbd | samba | No | apagarlo |
+| 1524/tcp | ingreslock (backdoor) | /bin/bash (xinetd) | metasploitable-backdoor | No | apagarlo |
+| 2121/tcp | proftpd | /usr/sbin/proftpd | proftpd-basic | No | apagarlo |
+| 3632/tcp | distccd | /usr/bin/distccd | distcc | No | apagarlo |
+| 5432/tcp, tcp6 | postgresql | /usr/lib/postgresql/.../postgres | postgresql | No | apagarlo |
+| 8180/tcp | tomcat (http) | /usr/bin/jsvc | jsvc / tomcat5.5 | No | apagarlo |
+| 8787/tcp | ruby web service | /usr/bin/ruby | ruby | No | apagarlo |
+| 111/tcp, udp | rpcbind / portmap | /sbin/portmap | portmap | No | apagarlo |
+| 2049/tcp, udp | nfs | - | nfs-kernel-server | No | Apagarlo |
+| 46373/tcp, 42213/udp | rpc.mountd | /usr/sbin/rpc.mountd | nfs-common | No | apagarlo |
+| 60492/tcp, 941/udp | rpc.statd | /usr/sbin/rpc.statd | nfs-common | No | apagarlo |
 
 
 | Aspecto | Antes | Contramedida aplicada | Después |
@@ -103,7 +122,7 @@ así ya no molesta.
 7. De todas las contramedidas de las partes A y B, ¿cuáles evitan que el atacante encuentre información y cuáles solo ayudan a detectar que lo están intentando? (Aún no las hemos aplicado todas, pero pensad en cuáles serían de cada tipo.)
    - las que evitan que un atacante encuentre información son las de desactivar servicios, cerrar los puertos. Con eso conseguimos que no sea tan visible y que se reduzca el ataque.
   
-   - 
+   - Las que detectan son las de monitorización y el análisis de logs, de esa forma ves las anomalías que estas representan lo cuál alerta a los encargados y base a eso toman medidas necesarias.
 
 
 
