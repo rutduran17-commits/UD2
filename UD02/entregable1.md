@@ -84,8 +84,8 @@ de esta manera nos devuleve el nombre del servicio que es exec.
 Tambien usando: sudo grep -v '^#' /etc/inetd.conf
 
 vemos que exec se encuentra dentro y que su programa ejecutable es:
-
-
+así tambien se busca un programa específico
+sudo netstat -tulpn | grep 2121
 /usr/sbin/in.rexecd
 
 Ahora veamos el paquete usando:
@@ -163,7 +163,19 @@ y si quiero que no vuelva a arrancar al inicio le doy un:
 
 sudo update-rc.d -f tomcat5.5 remove
 
+Cómo se impide: Eliminando sus enlaces de inicio con update-rc.d proftpd remove
 
+*************************************
+
+Dueño: El supervidor o portero (xinetd o inetd). No aparece con ps aux a menos que esté recibiendo una conexión en ese preciso instante.
+************************************************************************
+
+
+
+Acción final: Se recarga el portero con /etc/init.d/xinetd reload (¡Cuidado! Nunca se debe parar el portero por completo, ya que tirarías abajo todos los demás servicios legítimos que gestiona).
+
+
+Cómo se para e impide (un solo paso combinado): Se comenta la línea en /etc/inetd.conf o se marca disable = yes en su fichero de /etc/xinetd.d/.
 ////////////////////////////////////////////////       
  * Algunos no me daban el PID ni el nombre por lo que usaba el comando de
    grep (puerto) /etc/services 
@@ -199,3 +211,14 @@ ubuntu-archive-keyring.gpg   ---> clave oficial de ubuntu
 **************************************************************************************
 
 apt policy curl
+*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/**/*/*/*/*/*/*/*/*/*/*/*/*/*//***/*/*/*/*/
+
+Identificar: Ejecutamos sudo netstat -tulpn | grep 2121 y confirmamos que el proceso dueño es proftpd.
+
+Averiguar: Localizamos su script de control en /etc/init.d/proftpd y sus enlaces de arranque en las carpetas de niveles de ejecución (como /etc/rc2.d/).
+
+Parar: Ejecutamos sudo /etc/init.d/proftpd stop para detener el demonio de inmediato.
+
+Impedir: Borramos la persistencia con sudo update-rc.d proftpd remove para retirar los enlaces de arranque automático.
+
+Comprobar: Validamos localmente con netstat, escaneamos desde la máquina externa con sudo nmap -sV -p 2121 <IP> comprobando que figura como closed, y finalmente reiniciamos (sudo reboot) para confirmar que la configuración resiste un reinicio del sistema.
